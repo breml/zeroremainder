@@ -37,6 +37,10 @@ In my use case there are two problems with this solution:
 
 - [ ] Make divisor and dividend ranges configurable by flags
 - [ ] Make GOMAXPROCS configurable, defaults to number of CPUs
-- [ ] Make output (Summary only, every calculation, only wrong calculations) configurable by flag
+- [ ] Make output (Summary only if difference exists, Summary for every calculation, every calculation, only wrong calculations) configurable by flag
 - [ ] Add some documentation
 - [ ] Check with gometalinter
+- [ ] Print some statistics to stderr, how many calculations have allready made
+- [ ] Try to estimate the total time for the calculation, warn if very long
+- [ ] Allow to split one divisor to multiple go routines
+- [ ] Implement worker go routines, which get jobs from channel
