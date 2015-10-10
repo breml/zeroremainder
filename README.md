@@ -32,3 +32,11 @@ In my use case there are two problems with this solution:
 
 1. The modulo operation is, like the division operation for integer values, quite slow
 2. In my special situation there is no modulo operation available
+
+# TODO
+
+- [ ] Make divisor and dividend ranges configurable by flags
+- [ ] Make GOMAXPROCS configurable, defaults to number of CPUs
+- [ ] Make output (Summary only, every calculation, only wrong calculations) configurable by flag
+- [ ] Add some documentation
+- [ ] Check with gometalinter
