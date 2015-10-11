@@ -71,14 +71,14 @@ func main() {
 				if zeroremainder != exact {
 					zeroremainderWrong++
 					if *flagOutputAllDifferences {
-						fmt.Println("Difference: ", dividend, divisor, d.IsRestlessDividable(dividend), (dividend%divisor == 0), d.GetMn())
+						fmt.Println("DIFF Dividend:", dividend, "Divisor:", divisor, "Zeroremainder:", d.IsRestlessDividable(dividend), "Exact:", (dividend%divisor == 0), "Reciprocal:", d.GetReciprocal())
 					}
 				}
 				zeroremainderCount += Btoi(zeroremainder)
 				exactCount += Btoi(exact)
 			}
 			if Round(1.0/float64(exactCount)*float64(zeroremainderCount), 4) != 1.0 || *flagOutputAllDivisors {
-				fmt.Println("Divisor:", divisor, "Total differences between Zeroremainder and exact:", zeroremainderWrong, "Zeroremainder counts:", zeroremainderCount, "Modulo counts:", exactCount, "Difference (%):", 100.0-Round(100.0/float64(exactCount)*float64(zeroremainderCount), 4))
+				fmt.Println("Divisor:", divisor, "Zeroremainder counts:", zeroremainderCount, "Modulo counts:", exactCount, "Difference (%):", 100.0-Round(100.0/float64(exactCount)*float64(zeroremainderCount), 4), "Differences between Zeroremainder and exact:", zeroremainderWrong, "Reciprocal:", d.GetReciprocal())
 			}
 		}(aDivisor)
 	}

@@ -7,12 +7,12 @@ import (
 
 type Dividable interface {
 	IsRestlessDividable(uint32) bool
-	GetMn() uint32
+	GetReciprocal() uint32
 }
 
 type Zeroremainder struct {
-	divisor uint32
-	mn      uint32
+	divisor    uint32
+	reciprocal uint32
 }
 
 func NewZeroremainder(divisor uint32) Dividable {
@@ -27,16 +27,16 @@ func (zeroremainder *Zeroremainder) IsRestlessDividable(dividend uint32) bool {
 	if dividend < zeroremainder.divisor {
 		return false
 	}
-	return (dividend * zeroremainder.mn) < zeroremainder.mn
+	return (dividend * zeroremainder.reciprocal) < zeroremainder.reciprocal
 }
 
-func (zeroremainder *Zeroremainder) GetMn() uint32 {
-	return zeroremainder.mn
+func (zeroremainder *Zeroremainder) GetReciprocal() uint32 {
+	return zeroremainder.reciprocal
 }
 
 type DivisionPow2 struct {
-	divisor uint32
-	mn      uint32
+	divisor    uint32
+	reciprocal uint32
 }
 
 func NewDivisionPow2(divisor uint32) Dividable {
@@ -51,9 +51,9 @@ func (divisionPow2 *DivisionPow2) IsRestlessDividable(dividend uint32) bool {
 	if dividend < divisionPow2.divisor {
 		return false
 	}
-	return (dividend & divisionPow2.mn) == 0
+	return (dividend & divisionPow2.reciprocal) == 0
 }
 
-func (divisionPow2 *DivisionPow2) GetMn() uint32 {
-	return divisionPow2.mn
+func (divisionPow2 *DivisionPow2) GetReciprocal() uint32 {
+	return divisionPow2.reciprocal
 }
