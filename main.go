@@ -14,10 +14,11 @@ var (
 	flagDividendEnd   = flag.Int("dividendend", 0xffff, "End of range of dividends (uint32)")
 	flagDivisorStart  = flag.Int("divisorstart", 2, "Start of range of divisors (uint32)")
 	flagDivisorEnd    = flag.Int("divisorend", 1000, "End of range of divisors (uint32)")
+	flagMaxProcs      = flag.Int("maxprocs", 0, "Value for GOMAXPROCS (value may be reduced, respecting default GOMAXPROCS and number of CPUs)")
 )
 
 func main() {
-	runtime.GOMAXPROCS(4)
+	runtime.GOMAXPROCS(MaxParallelism(*flagMaxProcs))
 
 	var wg sync.WaitGroup
 

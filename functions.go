@@ -3,6 +3,7 @@ package main
 
 import (
 	"math"
+	"runtime"
 )
 
 // Convert boolean to int where true = 1 and false = 0
@@ -25,4 +26,27 @@ func round(a float64) float64 {
 func Round(f float64, places int) float64 {
 	shift := math.Pow(10, float64(places))
 	return round(f*shift) / shift
+}
+
+// Determine parallelism based on a desired input, while respecting GOMAXPROCS and numbers of CPU
+// desiredMaxProcs defaults to the reasonable max
+func MaxParallelism(desiredMaxProcs int) int {
+	if desiredMaxProcs < 0 {
+		return 1
+	}
+
+	var max int
+
+	maxProcs := runtime.GOMAXPROCS(0)
+	numCPU := runtime.NumCPU()
+	if maxProcs < numCPU {
+		max = maxProcs
+	} else {
+		max = numCPU
+	}
+
+	if desiredMaxProcs == 0 || desiredMaxProcs > max {
+		return max
+	}
+	return desiredMaxProcs
 }
