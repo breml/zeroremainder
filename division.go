@@ -10,28 +10,28 @@ type Dividable interface {
 	GetMn() uint32
 }
 
-type Division struct {
+type Zeroremainder struct {
 	divisor uint32
 	mn      uint32
 }
 
-func NewDivision(divisor uint32) Dividable {
-	division := &Division{divisor, math.MaxUint32/divisor + 1}
-	return division
+func NewZeroremainder(divisor uint32) Dividable {
+	zeroremainder := &Zeroremainder{divisor, math.MaxUint32/divisor + 1}
+	return zeroremainder
 }
 
-func (division *Division) IsRestlessDividable(dividend uint32) bool {
+func (zeroremainder *Zeroremainder) IsRestlessDividable(dividend uint32) bool {
 	if dividend == 0 {
 		return true
 	}
-	if dividend < division.divisor {
+	if dividend < zeroremainder.divisor {
 		return false
 	}
-	return (dividend * division.mn) < division.mn
+	return (dividend * zeroremainder.mn) < zeroremainder.mn
 }
 
-func (division *Division) GetMn() uint32 {
-	return division.mn
+func (zeroremainder *Zeroremainder) GetMn() uint32 {
+	return zeroremainder.mn
 }
 
 type DivisionPow2 struct {
@@ -40,20 +40,20 @@ type DivisionPow2 struct {
 }
 
 func NewDivisionPow2(divisor uint32) Dividable {
-	division := &DivisionPow2{divisor, divisor - 1}
-	return division
+	divisionPow2 := &DivisionPow2{divisor, divisor - 1}
+	return divisionPow2
 }
 
-func (division *DivisionPow2) IsRestlessDividable(dividend uint32) bool {
+func (divisionPow2 *DivisionPow2) IsRestlessDividable(dividend uint32) bool {
 	if dividend == 0 {
 		return true
 	}
-	if dividend < division.divisor {
+	if dividend < divisionPow2.divisor {
 		return false
 	}
-	return (dividend & division.mn) == 0
+	return (dividend & divisionPow2.mn) == 0
 }
 
-func (division *DivisionPow2) GetMn() uint32 {
-	return division.mn
+func (divisionPow2 *DivisionPow2) GetMn() uint32 {
+	return divisionPow2.mn
 }

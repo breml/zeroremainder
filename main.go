@@ -38,38 +38,40 @@ func main() {
 	var minDivisor uint32 = uint32(*flagDivisorStart) // min is 2 because negative number and zero don't make sense, and 1 means every packet (no selection)
 	var maxDivisor uint32 = uint32(*flagDivisorEnd)   // tested until 100000
 
-	var i uint32
-	for i = minDivisor; i <= maxDivisor; i++ {
-		go func(i uint32) {
+	var aDivisor uint32
+	for aDivisor = minDivisor; aDivisor <= maxDivisor; aDivisor++ {
+		go func(divisor uint32) {
 			wg.Add(1)
 			defer wg.Done()
 
-			var j uint32
+			var dividend uint32
 			var d Dividable
 
-			if i&(i-1) == 0 {
-				d = NewDivisionPow2(i)
+			// Check if divisor is a power of 2
+			if divisor&(divisor-1) == 0 {
+				d = NewDivisionPow2(divisor)
 			} else {
-				d = NewDivision(i)
+				d = NewZeroremainder(divisor)
 			}
-			var fastCount, exactCount, fastWrong int
-			for j = minDividend; j < maxDividend; j++ {
-				fast := d.IsRestlessDividable(j)
-				exact := (j%i == 0)
-				if fast != exact {
+
+			var testCount, exactCount, fastWrong int
+			for dividend = minDividend; dividend < maxDividend; dividend++ {
+				test := d.IsRestlessDividable(dividend)
+				exact := (dividend%divisor == 0)
+				if test != exact {
 					fastWrong++
 					if *flagOutputAllDifferences {
-						fmt.Println("Difference: ", j, i, d.IsRestlessDividable(j), (j%i == 0), d.GetMn())
+						fmt.Println("Difference: ", dividend, divisor, d.IsRestlessDividable(dividend), (dividend%divisor == 0), d.GetMn())
 						os.Exit(0)
 					}
 				}
-				fastCount += Btoi(fast)
+				testCount += Btoi(test)
 				exactCount += Btoi(exact)
 			}
-			if Round(1.0/float64(exactCount)*float64(fastCount), 4) != 1.0 || *flagOutputAllDivisors {
-				fmt.Println("Divisor:", i, "Fast wrong:", fastWrong, "Zeroremainder counts:", fastCount, "Modulo operation counts:", exactCount, "Difference (%):", 100.0-Round(100.0/float64(exactCount)*float64(fastCount), 4))
+			if Round(1.0/float64(exactCount)*float64(testCount), 4) != 1.0 || *flagOutputAllDivisors {
+				fmt.Println("Divisor:", divisor, "Total differences between Zeroremainder and exact:", fastWrong, "Zeroremainder counts:", testCount, "Modulo counts:", exactCount, "Difference (%):", 100.0-Round(100.0/float64(exactCount)*float64(testCount), 4))
 			}
-		}(i)
+		}(aDivisor)
 	}
 
 	time.Sleep(1 * time.Second)
