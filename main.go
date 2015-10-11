@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 	"runtime"
@@ -8,16 +9,23 @@ import (
 	"time"
 )
 
+var (
+	flagDividendStart = flag.Int("dividendstart", 0, "Start of range of dividends (uint32)")
+	flagDividendEnd   = flag.Int("dividendend", 0xffff, "End of range of dividends (uint32)")
+	flagDivisorStart  = flag.Int("divisorstart", 2, "Start of range of divisors (uint32)")
+	flagDivisorEnd    = flag.Int("divisorend", 1000, "End of range of divisors (uint32)")
+)
+
 func main() {
 	runtime.GOMAXPROCS(4)
 
 	var wg sync.WaitGroup
 
-	var minDividend uint32 = 0
-	var maxDividend uint32 = 0xffff // fully tested for 0xffffff, may take a long time
+	var minDividend uint32 = uint32(*flagDividendStart)
+	var maxDividend uint32 = uint32(*flagDividendEnd) // fully tested for 0xffffff, may take a long time
 
-	var minDivisor uint32 = 2    // min is 2 because negative number and zero don't make sense, and 1 means every packet (no selection)
-	var maxDivisor uint32 = 1000 // tested until 100000
+	var minDivisor uint32 = uint32(*flagDivisorStart) // min is 2 because negative number and zero don't make sense, and 1 means every packet (no selection)
+	var maxDivisor uint32 = uint32(*flagDivisorEnd)   // tested until 100000
 
 	var i uint32
 	for i = minDivisor; i <= maxDivisor; i++ {

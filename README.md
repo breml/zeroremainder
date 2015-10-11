@@ -35,7 +35,7 @@ In my use case there are two problems with this solution:
 
 # TODO
 
-- [ ] Make divisor and dividend ranges configurable by flags
+- [x] Make divisor and dividend ranges configurable by flags
 - [ ] Make GOMAXPROCS configurable, defaults to number of CPUs
 - [ ] Make output (Summary only if difference exists, Summary for every calculation, every calculation, only wrong calculations) configurable by flag
 - [ ] Add some documentation
