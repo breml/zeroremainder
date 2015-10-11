@@ -93,7 +93,7 @@ func main() {
 	var maxDivisor uint32 = 1000 // tested until 100000
 
 	var i uint32
-	for i = minDivisor; i < maxDivisor; i++ {
+	for i = minDivisor; i <= maxDivisor; i++ {
 		go func(i uint32) {
 			wg.Add(1)
 			defer wg.Done()
