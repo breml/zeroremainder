@@ -2,84 +2,11 @@ package main
 
 import (
 	"fmt"
-	"math"
 	"os"
 	"runtime"
 	"sync"
 	"time"
 )
-
-func Btoi(b bool) int {
-	if b {
-		return 1
-	}
-	return 0
-}
-
-func Round(a float64) float64 {
-	if a < 0 {
-		return math.Ceil(a - 0.5)
-	}
-	return math.Floor(a + 0.5)
-}
-
-func RoundPlus(f float64, places int) float64 {
-	shift := math.Pow(10, float64(places))
-	return Round(f*shift) / shift
-}
-
-type Dividable interface {
-	IsRestlessDividable(uint32) bool
-	GetMn() uint32
-}
-
-type Division struct {
-	divisor uint32
-	mn      uint32
-}
-
-func NewDivision(divisor uint32) Dividable {
-	division := &Division{divisor, math.MaxUint32/divisor + 1}
-	return division
-}
-
-func (division *Division) IsRestlessDividable(dividend uint32) bool {
-	if dividend == 0 {
-		return true
-	}
-	if dividend < division.divisor {
-		return false
-	}
-	return (dividend * division.mn) < division.mn
-}
-
-func (division *Division) GetMn() uint32 {
-	return division.mn
-}
-
-type DivisionPow2 struct {
-	divisor uint32
-	mn      uint32
-}
-
-func NewDivisionPow2(divisor uint32) Dividable {
-	division := &DivisionPow2{divisor, divisor - 1}
-	return division
-}
-
-func (division *DivisionPow2) IsRestlessDividable(dividend uint32) bool {
-	if dividend == 0 {
-		return true
-	}
-	if dividend < division.divisor {
-		return false
-	}
-	return (dividend & division.mn) == 0
-}
-
-func (division *DivisionPow2) GetMn() uint32 {
-	return division.mn
-}
 
 func main() {
 	runtime.GOMAXPROCS(4)
@@ -120,8 +47,8 @@ func main() {
 				fastCount += Btoi(fast)
 				exactCount += Btoi(exact)
 			}
-			//if RoundPlus(1.0/float64(exactCount)*float64(fastCount), 4) != 1.0 {
-			fmt.Println("Divisor:", i, "Fast wrong:", fastWrong, "Zeroremainder counts:", fastCount, "Modulo operation counts:", exactCount, "Difference (%):", 100.0-RoundPlus(100.0/float64(exactCount)*float64(fastCount), 4))
+			//if Round(1.0/float64(exactCount)*float64(fastCount), 4) != 1.0 {
+			fmt.Println("Divisor:", i, "Fast wrong:", fastWrong, "Zeroremainder counts:", fastCount, "Modulo operation counts:", exactCount, "Difference (%):", 100.0-Round(100.0/float64(exactCount)*float64(fastCount), 4))
 			//}
 		}(i)
 	}
