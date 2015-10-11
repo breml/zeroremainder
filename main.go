@@ -72,7 +72,6 @@ func main() {
 					zeroremainderWrong++
 					if *flagOutputAllDifferences {
 						fmt.Println("Difference: ", dividend, divisor, d.IsRestlessDividable(dividend), (dividend%divisor == 0), d.GetMn())
-						os.Exit(0)
 					}
 				}
 				zeroremainderCount += Btoi(zeroremainder)
