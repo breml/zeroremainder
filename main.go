@@ -17,6 +17,8 @@ var (
 	flagMaxProcs             = flag.Int("maxprocs", 0, "Value for GOMAXPROCS (value may be reduced, respecting default GOMAXPROCS and number of CPUs)")
 	flagOutputAllDivisors    = flag.Bool("outputalldivisors", false, "Output result for all divisors")
 	flagOutputAllDifferences = flag.Bool("outputalldifferences", false, "Output every dividend / divisor combination which provides a flase result")
+	flagIgnorePow2           = flag.Bool("ignorepow2", true, "for power of 2 divisors the solution is trivial, therefore these divisors may be ignored")
+	flagUsePow2              = flag.Bool("usepow2", true, "use bitwise and for power of 2 divisors")
 	flagHelp                 = flag.Bool("help", false, "Print help")
 )
 
@@ -49,27 +51,35 @@ func main() {
 
 			// Check if divisor is a power of 2
 			if divisor&(divisor-1) == 0 {
-				d = NewDivisionPow2(divisor)
+				if *flagIgnorePow2 {
+					return
+				} else {
+					if *flagUsePow2 {
+						d = NewDivisionPow2(divisor)
+					} else {
+						d = NewZeroremainder(divisor)
+					}
+				}
 			} else {
 				d = NewZeroremainder(divisor)
 			}
 
-			var testCount, exactCount, fastWrong int
+			var zeroremainderCount, exactCount, zeroremainderWrong int
 			for dividend = minDividend; dividend < maxDividend; dividend++ {
-				test := d.IsRestlessDividable(dividend)
+				zeroremainder := d.IsRestlessDividable(dividend)
 				exact := (dividend%divisor == 0)
-				if test != exact {
-					fastWrong++
+				if zeroremainder != exact {
+					zeroremainderWrong++
 					if *flagOutputAllDifferences {
 						fmt.Println("Difference: ", dividend, divisor, d.IsRestlessDividable(dividend), (dividend%divisor == 0), d.GetMn())
 						os.Exit(0)
 					}
 				}
-				testCount += Btoi(test)
+				zeroremainderCount += Btoi(zeroremainder)
 				exactCount += Btoi(exact)
 			}
-			if Round(1.0/float64(exactCount)*float64(testCount), 4) != 1.0 || *flagOutputAllDivisors {
-				fmt.Println("Divisor:", divisor, "Total differences between Zeroremainder and exact:", fastWrong, "Zeroremainder counts:", testCount, "Modulo counts:", exactCount, "Difference (%):", 100.0-Round(100.0/float64(exactCount)*float64(testCount), 4))
+			if Round(1.0/float64(exactCount)*float64(zeroremainderCount), 4) != 1.0 || *flagOutputAllDivisors {
+				fmt.Println("Divisor:", divisor, "Total differences between Zeroremainder and exact:", zeroremainderWrong, "Zeroremainder counts:", zeroremainderCount, "Modulo counts:", exactCount, "Difference (%):", 100.0-Round(100.0/float64(exactCount)*float64(zeroremainderCount), 4))
 			}
 		}(aDivisor)
 	}
