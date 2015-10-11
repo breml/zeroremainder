@@ -10,11 +10,13 @@ import (
 )
 
 var (
-	flagDividendStart = flag.Int("dividendstart", 0, "Start of range of dividends (uint32)")
-	flagDividendEnd   = flag.Int("dividendend", 0xffff, "End of range of dividends (uint32)")
-	flagDivisorStart  = flag.Int("divisorstart", 2, "Start of range of divisors (uint32)")
-	flagDivisorEnd    = flag.Int("divisorend", 1000, "End of range of divisors (uint32)")
-	flagMaxProcs      = flag.Int("maxprocs", 0, "Value for GOMAXPROCS (value may be reduced, respecting default GOMAXPROCS and number of CPUs)")
+	flagDividendStart        = flag.Int("dividendstart", 0, "Start of range of dividends (uint32)")
+	flagDividendEnd          = flag.Int("dividendend", 0xffff, "End of range of dividends (uint32)")
+	flagDivisorStart         = flag.Int("divisorstart", 2, "Start of range of divisors (uint32)")
+	flagDivisorEnd           = flag.Int("divisorend", 1000, "End of range of divisors (uint32)")
+	flagMaxProcs             = flag.Int("maxprocs", 0, "Value for GOMAXPROCS (value may be reduced, respecting default GOMAXPROCS and number of CPUs)")
+	flagOutputAllDivisors    = flag.Bool("outputalldivisors", false, "Output result for all divisors")
+	flagOutputAllDifferences = flag.Bool("outputalldifferences", false, "Output every dividend / divisor combination which provides a flase result")
 )
 
 func main() {
@@ -48,17 +50,17 @@ func main() {
 				exact := (j%i == 0)
 				if fast != exact {
 					fastWrong++
-					if false {
-						fmt.Println("Error: ", j, i, d.IsRestlessDividable(j), (j%i == 0), d.GetMn())
+					if *flagOutputAllDifferences {
+						fmt.Println("Difference: ", j, i, d.IsRestlessDividable(j), (j%i == 0), d.GetMn())
 						os.Exit(0)
 					}
 				}
 				fastCount += Btoi(fast)
 				exactCount += Btoi(exact)
 			}
-			//if Round(1.0/float64(exactCount)*float64(fastCount), 4) != 1.0 {
-			fmt.Println("Divisor:", i, "Fast wrong:", fastWrong, "Zeroremainder counts:", fastCount, "Modulo operation counts:", exactCount, "Difference (%):", 100.0-Round(100.0/float64(exactCount)*float64(fastCount), 4))
-			//}
+			if Round(1.0/float64(exactCount)*float64(fastCount), 4) != 1.0 || *flagOutputAllDivisors {
+				fmt.Println("Divisor:", i, "Fast wrong:", fastWrong, "Zeroremainder counts:", fastCount, "Modulo operation counts:", exactCount, "Difference (%):", 100.0-Round(100.0/float64(exactCount)*float64(fastCount), 4))
+			}
 		}(i)
 	}
 
