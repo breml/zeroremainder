@@ -17,9 +17,17 @@ var (
 	flagMaxProcs             = flag.Int("maxprocs", 0, "Value for GOMAXPROCS (value may be reduced, respecting default GOMAXPROCS and number of CPUs)")
 	flagOutputAllDivisors    = flag.Bool("outputalldivisors", false, "Output result for all divisors")
 	flagOutputAllDifferences = flag.Bool("outputalldifferences", false, "Output every dividend / divisor combination which provides a flase result")
+	flagHelp                 = flag.Bool("help", false, "Print help")
 )
 
 func main() {
+	flag.Parse()
+
+	if *flagHelp {
+		flag.Usage()
+		os.Exit(0)
+	}
+
 	runtime.GOMAXPROCS(MaxParallelism(*flagMaxProcs))
 
 	var wg sync.WaitGroup
