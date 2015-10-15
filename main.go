@@ -71,7 +71,7 @@ func main() {
 			}
 
 			var zeroremainderCount, exactCount, zeroremainderWrong int
-			for dividend = minDividend; dividend < maxDividend; dividend++ {
+			for dividend = minDividend; dividend <= maxDividend; dividend++ {
 				zeroremainder := d.IsRestlessDividable(dividend)
 				exact := (dividend%divisor == 0)
 				if *flagOutputAll {
