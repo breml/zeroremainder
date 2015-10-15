@@ -11,18 +11,18 @@ import (
 )
 
 var (
-	flagDividendStart        = flag.Int("dividendstart", 0, "Start of range of dividends")
-	flagDividendEnd          = flag.Int("dividendend", 0xffff, "End of range of dividends")
-	flagDivisorStart         = flag.Int("divisorstart", 2, "Start of range of divisors")
-	flagDivisorEnd           = flag.Int("divisorend", 1000, "End of range of divisors")
-	flagMaxProcs             = flag.Int("maxprocs", 0, "Value for GOMAXPROCS (value may be reduced, respecting default GOMAXPROCS and number of CPUs)")
-	flagOutputAllDivisors    = flag.Bool("outputalldivisors", false, "Output result for all divisors")
-	flagOutputAllDifferences = flag.Bool("outputalldifferences", false, "Output every dividend / divisor combination which provides a flase result")
-	flagOutputAllCalc        = flag.Bool("outputallcalc", false, "Output every calculation; WARNING: very verbose, use only with small ranges for dividend and divisor, maxprocs should be set to 1")
-	flagIgnorePow2           = flag.Bool("ignorepow2", true, "for power of 2 divisors the solution is trivial, therefore these divisors may be ignored")
-	flagUsePow2              = flag.Bool("usepow2", true, "use bitwise and for power of 2 divisors")
-	flagHelp                 = flag.Bool("help", false, "Print help")
-	flagNumType              = flag.String("numtype", "uint32", "numeric type, used for the calculations (one of: uint8, uint16, uint32, uint64)")
+	flagDividendStart     = flag.Int("dividendstart", 0, "Start of range of dividends")
+	flagDividendEnd       = flag.Int("dividendend", 0xffff, "End of range of dividends")
+	flagDivisorStart      = flag.Int("divisorstart", 2, "Start of range of divisors")
+	flagDivisorEnd        = flag.Int("divisorend", 1000, "End of range of divisors")
+	flagMaxProcs          = flag.Int("maxprocs", 0, "Value for GOMAXPROCS (value may be reduced, respecting default GOMAXPROCS and number of CPUs)")
+	flagOutputAllDivisors = flag.Bool("outputalldivisors", false, "Output result for all divisors")
+	flagOutputDifferences = flag.Bool("outputdifferences", false, "Output every dividend / divisor combination which provides a flase result")
+	flagOutputCalc        = flag.Bool("outputcalc", false, "Output every calculation; WARNING: very verbose, use only with small ranges for dividend and divisor, maxprocs should be set to 1")
+	flagIgnorePow2        = flag.Bool("ignorepow2", true, "for power of 2 divisors the solution is trivial, therefore these divisors may be ignored")
+	flagUsePow2           = flag.Bool("usepow2", true, "use bitwise and for power of 2 divisors")
+	flagHelp              = flag.Bool("help", false, "Print help")
+	flagNumType           = flag.String("numtype", "uint32", "numeric type, used for the calculations (one of: uint8, uint16, uint32, uint64)")
 )
 
 func main() {
@@ -87,12 +87,12 @@ func main() {
 			for dividend = minDividend; dividend <= maxDividend; dividend++ {
 				zeroremainder := d.IsRestlessDividable(dividend)
 				exact := (dividend%divisor == 0)
-				if *flagOutputAllCalc {
+				if *flagOutputCalc {
 					fmt.Printf("CALC Dividend: %9d Divisor: %9d Zeroremainder: %5t Exact: %5t Correct: %5t\n", dividend, divisor, d.IsRestlessDividable(dividend), dividend%divisor == 0, zeroremainder == exact)
 				}
 				if zeroremainder != exact {
 					zeroremainderWrong++
-					if *flagOutputAllDifferences {
+					if *flagOutputDifferences {
 						fmt.Printf("DIFF Dividend: %9d Divisor: %9d Zeroremainder: %5t Exact: %5t Reciprocal: %9d\n", dividend, divisor, d.IsRestlessDividable(dividend), dividend%divisor == 0, d.GetReciprocal())
 					}
 				}
