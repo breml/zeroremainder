@@ -82,11 +82,12 @@ func main() {
 					d = NewZeroremainderUint64(divisor)
 				}
 			}
+			e := NewDivisionMod(divisor)
 
 			var zeroremainderCount, exactCount, zeroremainderWrong int
 			for dividend = minDividend; dividend <= maxDividend; dividend++ {
 				zeroremainder := d.IsRestlessDividable(dividend)
-				exact := (dividend%divisor == 0)
+				exact := e.IsRestlessDividable(dividend)
 				if *flagOutputCalc {
 					fmt.Printf("CALC Dividend: %9d Divisor: %9d Zeroremainder: %5t Exact: %5t Correct: %5t\n", dividend, divisor, d.IsRestlessDividable(dividend), dividend%divisor == 0, zeroremainder == exact)
 				}
