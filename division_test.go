@@ -35,3 +35,11 @@ func BenchmarkZeroremainderUint64(b *testing.B) {
 		d.IsRestlessDividable(uint64(n))
 	}
 }
+
+func BenchmarkDivisionLt(b *testing.B) {
+	d := NewDivisionLt(1024)
+	// run the dividable check function b.N times
+	for n := 0; n < b.N; n++ {
+		d.IsRestlessDividable(uint64(n))
+	}
+}
