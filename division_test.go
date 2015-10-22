@@ -5,7 +5,7 @@ import (
 )
 
 func BenchmarkDivisionMod(b *testing.B) {
-	d := NewDivisionMod(1000)
+	d := NewDivisionMod(1024)
 	// run the dividable check function b.N times
 	for n := 0; n < b.N; n++ {
 		d.IsRestlessDividable(uint64(n))
@@ -21,7 +21,7 @@ func BenchmarkDivisionPow2(b *testing.B) {
 }
 
 func BenchmarkZeroremainderUint32(b *testing.B) {
-	d := NewZeroremainderUint32(1000)
+	d := NewZeroremainderUint32(1024)
 	// run the dividable check function b.N times
 	for n := 0; n < b.N; n++ {
 		d.IsRestlessDividable(uint64(n))
@@ -29,7 +29,7 @@ func BenchmarkZeroremainderUint32(b *testing.B) {
 }
 
 func BenchmarkZeroremainderUint64(b *testing.B) {
-	d := NewZeroremainderUint64(1000)
+	d := NewZeroremainderUint64(1024)
 	// run the dividable check function b.N times
 	for n := 0; n < b.N; n++ {
 		d.IsRestlessDividable(uint64(n))
