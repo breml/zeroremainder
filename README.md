@@ -44,3 +44,6 @@ In my use case there are two problems with this solution:
 - [ ] Try to estimate the total time for the calculation, warn if very long
 - [ ] Allow to split one divisor to multiple go routines
 - [ ] Implement worker go routines, which get jobs from channel
+- [ ] Update README.md based on blog entry
+- [ ] Add some tests
+- [ ] Cleanup with gometalinter
